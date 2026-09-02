@@ -1,0 +1,547 @@
+/* ==========================================================================
+   משתני עיצוב, פלטת צבעים והגדרות בסיס
+   ========================================================================== */
+:root {
+  --bg-primary: #FFFFFF;
+  --accent-light: #A7C7E7;      /* כחול בהיר מעודן */
+  --accent-dark: #4682B4;       /* כחול פלדה יוקרתי */
+  --text-dark: #1E2229;         /* שחור פחם רך לקריאות אלגנטית */
+  --text-muted: #6B7280;        /* אפור עדין לטקסט משני */
+  --card-border: #E5EBF2;       /* גבולות קלים בהירים */
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'Assistant', 'Heebo', -apple-system, BlinkMacSystemFont, sans-serif;
+  --safe-bottom: env(safe-area-inset-bottom, 15px);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-family: var(--font-sans);
+  background-color: #F7F9FC; /* רקע עדין מחוץ לטלפון במסכי מחשב */
+  color: var(--text-dark);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  background-color: var(--bg-primary);
+}
+
+/* מסגרת מובייל מרכזית (390px responsive) */
+.invitation-container {
+  width: 100%;
+  max-width: 430px;
+  margin: 0 auto;
+  background-color: var(--bg-primary);
+  min-height: 100vh;
+  position: relative;
+  box-shadow: 0 0 35px rgba(70, 130, 180, 0.08);
+}
+
+/* ==========================================================================
+   שלב 0 – מעטפה ואנימציית פתיחה
+   ========================================================================== */
+.envelope-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background-color: #1a1e24;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: opacity 0.9s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.9s ease;
+}
+
+.envelope-overlay.opened {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.envelope-card {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  height: 100vh;
+  max-height: 920px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  transition: transform 1.1s cubic-bezier(0.25, 1, 0.5, 1), filter 0.8s ease;
+}
+
+.envelope-overlay.opening .envelope-card {
+  transform: scale(1.08) translateY(-20px);
+  filter: blur(4px);
+}
+
+.envelope-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.tap-hint {
+  position: absolute;
+  bottom: calc(var(--safe-bottom) + 50px);
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  letter-spacing: 2px;
+  color: #555048;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(8px);
+  padding: 9px 24px;
+  border-radius: 30px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  animation: pulseHint 2.4s infinite ease-in-out;
+}
+
+@keyframes pulseHint {
+  0%, 100% { transform: translateY(0); opacity: 0.85; }
+  50% { transform: translateY(-5px); opacity: 1; }
+}
+
+/* ==========================================================================
+   כפתור שמע צף (Fixed Music Button)
+   ========================================================================== */
+.music-btn {
+  position: fixed;
+  bottom: calc(var(--safe-bottom) + 16px);
+  right: 18px;
+  z-index: 1000;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--accent-light);
+  box-shadow: 0 4px 16px rgba(70, 130, 180, 0.22);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  transition: transform 0.25s ease, background-color 0.25s ease;
+}
+
+.music-btn:active {
+  transform: scale(0.92);
+}
+
+.music-btn.playing {
+  border-color: var(--accent-dark);
+}
+
+/* קנבס קונפטי */
+#confetti-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 999;
+}
+
+/* ==========================================================================
+   מבנה סקציות כללי
+   ========================================================================== */
+.screen-section {
+  width: 100%;
+  position: relative;
+}
+
+.section-white {
+  background: var(--bg-primary);
+  padding: 65px 24px;
+}
+
+.section-inner {
+  text-align: center;
+}
+
+.section-title {
+  font-family: var(--font-serif);
+  font-size: 2.2rem;
+  font-weight: 400;
+  color: var(--accent-dark);
+  letter-spacing: 1.5px;
+  margin-bottom: 6px;
+}
+
+.section-subtitle {
+  font-size: 0.92rem;
+  color: var(--text-muted);
+  font-weight: 300;
+  margin-bottom: 34px;
+}
+
+/* ==========================================================================
+   מסך 1 – Hero Section (רקע פרפרים + סליידר)
+   ========================================================================== */
+.hero-section {
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-image: url('assets/hero-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: calc(env(safe-area-inset-top, 20px) + 50px) 24px calc(var(--safe-bottom) + 20px) 24px;
+  text-align: center;
+}
+
+.hero-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: auto 0;
+}
+
+.hero-tagline {
+  font-family: var(--font-serif);
+  letter-spacing: 3px;
+  font-size: 0.85rem;
+  color: var(--accent-dark);
+  margin-bottom: 12px;
+}
+
+.couple-names {
+  font-family: var(--font-serif);
+  font-size: 2.8rem;
+  font-weight: 400;
+  letter-spacing: 2px;
+  line-height: 1.2;
+  color: var(--text-dark);
+  margin-bottom: 14px;
+}
+
+.names-divider {
+  width: 44px;
+  height: 1.5px;
+  background-color: var(--accent-light);
+  margin-bottom: 35px;
+}
+
+/* סליידר חשיפת התאריך */
+.slider-wrapper {
+  width: 100%;
+  max-width: 310px;
+  margin: 10px auto;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.slider-wrapper.hidden {
+  display: none;
+}
+
+.slider-track {
+  position: relative;
+  width: 100%;
+  height: 52px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid var(--accent-light);
+  border-radius: 30px;
+  box-shadow: 0 4px 20px rgba(70, 130, 180, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  user-select: none;
+  touch-action: none;
+}
+
+.slider-text {
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: var(--accent-dark);
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.slider-handle {
+  position: absolute;
+  top: 4px;
+  right: 4px; /* מיקום התחלתי בצד ימין עבור RTL */
+  width: 44px;
+  height: 44px;
+  background: var(--accent-dark);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  cursor: grab;
+  box-shadow: 0 3px 10px rgba(70, 130, 180, 0.35);
+  touch-action: none;
+}
+
+.slider-handle:active {
+  cursor: grabbing;
+}
+
+.handle-icon {
+  font-size: 1.1rem;
+}
+
+/* קופסת התאריך שנחשפת */
+.revealed-date-box {
+  display: none;
+  animation: elegantFadeIn 0.8s ease-out forwards;
+}
+
+.revealed-date-box.active {
+  display: block;
+}
+
+.hebrew-date {
+  font-size: 1.05rem;
+  color: var(--accent-dark);
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.gregorian-date {
+  font-family: var(--font-serif);
+  font-size: 2.3rem;
+  letter-spacing: 4px;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+@keyframes elegantFadeIn {
+  0% { opacity: 0; transform: scale(0.92); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* חץ גלילה למטה */
+.scroll-arrow-down {
+  color: var(--accent-dark);
+  text-decoration: none;
+  font-size: 1.8rem;
+  animation: bounceDown 2.2s infinite ease-in-out;
+  padding: 8px;
+}
+
+@keyframes bounceDown {
+  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(8px); }
+  60% { transform: translateY(4px); }
+}
+
+/* ==========================================================================
+   מסך 2 – Countdown
+   ========================================================================== */
+.countdown-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  max-width: 360px;
+  margin: 0 auto;
+}
+
+.time-card {
+  background: #FFFFFF;
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 16px 6px;
+  box-shadow: 0 6px 18px rgba(70, 130, 180, 0.06);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.time-number {
+  font-family: var(--font-serif);
+  font-size: 1.9rem;
+  font-weight: 600;
+  color: var(--accent-dark);
+  line-height: 1;
+}
+
+.time-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.8px;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+
+/* ==========================================================================
+   מסך 3 – The Wedding Day (Timeline)
+   ========================================================================== */
+.timeline-container {
+  position: relative;
+  max-width: 300px;
+  margin: 0 auto;
+  padding: 10px 0;
+}
+
+.timeline-line {
+  position: absolute;
+  right: 17px;
+  top: 15px;
+  bottom: 25px;
+  width: 1.5px;
+  background: var(--accent-light);
+}
+
+.timeline-item {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 34px;
+  padding-right: 48px;
+  text-align: right;
+}
+
+.timeline-item:last-child {
+  margin-bottom: 0;
+}
+
+.timeline-marker {
+  position: absolute;
+  right: 10px;
+  top: 3px;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  border: 2.5px solid var(--accent-dark);
+}
+
+.timeline-time {
+  display: block;
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--accent-dark);
+  line-height: 1.1;
+}
+
+.timeline-event {
+  display: block;
+  font-size: 0.96rem;
+  color: var(--text-dark);
+  margin-top: 3px;
+}
+
+/* ==========================================================================
+   מסך 4 – Location & Waze
+   ========================================================================== */
+.venue-image-wrapper {
+  width: 100%;
+  max-width: 350px;
+  height: 190px;
+  border-radius: 16px;
+  overflow: hidden;
+  margin: 0 auto 20px auto;
+  box-shadow: 0 8px 24px rgba(70, 130, 180, 0.12);
+  border: 1px solid var(--card-border);
+}
+
+.venue-image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.venue-info-box {
+  margin-bottom: 24px;
+}
+
+.venue-name {
+  font-size: 1.28rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 4px;
+}
+
+.venue-address {
+  font-size: 0.94rem;
+  color: var(--text-muted);
+}
+
+.waze-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: var(--accent-dark);
+  color: #FFFFFF;
+  text-decoration: none;
+  font-size: 0.98rem;
+  font-weight: 500;
+  padding: 13px 32px;
+  border-radius: 30px;
+  box-shadow: 0 5px 18px rgba(70, 130, 180, 0.3);
+  transition: background-color 0.25s ease, transform 0.2s ease;
+}
+
+.waze-button:active {
+  transform: scale(0.96);
+  background: #36648B;
+}
+
+/* ==========================================================================
+   מסך 5 – Thank You
+   ========================================================================== */
+.thankyou-section {
+  background: #FFFFFF;
+  padding: 70px 24px calc(var(--safe-bottom) + 60px) 24px;
+  border-top: 1px solid var(--card-border);
+}
+
+.monogram-end {
+  font-family: var(--font-serif);
+  font-size: 1.7rem;
+  color: var(--accent-light);
+  letter-spacing: 3px;
+  margin-bottom: 12px;
+}
+
+.thankyou-title {
+  margin-bottom: 14px;
+}
+
+.thankyou-text {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--text-dark);
+  max-width: 280px;
+  margin: 0 auto 18px auto;
+}
+
+.see-you-text {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  color: var(--accent-dark);
+}
+
+/* ==========================================================================
+   אפקט הופעה הדרגתית בגלילה (Scroll Fade-In)
+   ========================================================================== */
+.fade-in-on-scroll {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.85s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.85s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.fade-in-on-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}

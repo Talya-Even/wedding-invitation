@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
+  <title>הזמנה לחתונה</title>
+
+  <!-- Google Fonts: גופנים יוקרתיים בעברית ובאנגלית -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;600&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Heebo:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- מעטפת הפתיחה (שלב 0) -->
+  <div id="envelope-overlay" class="envelope-overlay">
+    <div class="envelope-card" id="envelope-card">
+      <img src="assets/envelope.jpg" alt="מעטפת חתונה" id="envelope-img" class="envelope-img" />
+      <div class="wax-pulse-hint"></div>
+      <div class="tap-hint">פתחו את ההזמנה</div>
+    </div>
+  </div>
+
+  <!-- קובץ שמע למוזיקת רקע -->
+  <audio id="wedding-audio" loop preload="auto">
+    <source src="assets/wedding-song.mp3" type="audio/mpeg" />
+    <source src="assets/wedding-song.mp3" type="audio/mp4" />
+  </audio>
+
+  <!-- כפתור שמע צף קבוע בפינה הימנית התחתונה -->
+  <button id="music-toggle-btn" class="music-btn" aria-label="הפעל או השתק מוזיקה">
+    <span id="music-icon">🔇</span>
+  </button>
+
+  <!-- קנבס קונפטי עצמאי -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- מעטפת האתר הראשית (Mobile-First Frame) -->
+  <main class="invitation-container" id="main-content">
+
+    <!-- מסך 1: רקע פרפרים + שמות + סליידר תאריך + חץ -->
+    <section id="hero-section" class="screen-section hero-section">
+      <div class="hero-content">
+        <p class="hero-tagline">WE ARE GETTING MARRIED</p>
+        <h1 class="couple-names" id="couple-names-display">BAR & TALYA</h1>
+        <div class="names-divider"></div>
+
+        <!-- סליידר חשיפת התאריך -->
+        <div class="slider-wrapper" id="slider-wrapper">
+          <div class="slider-track" id="slider-track">
+            <span class="slider-text" id="slider-text">← החליקו לחשיפת התאריך</span>
+            <div class="slider-handle" id="slider-handle">
+              <span class="handle-icon">♡</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- תצוגת התאריך לאחר החלקה -->
+        <div class="revealed-date-box" id="revealed-date-box">
+          <p class="hebrew-date" id="hebrew-date-display">יום חמישי | י״ח באלול תשפ״ו</p>
+          <p class="gregorian-date" id="gregorian-date-display">10.09.2026</p>
+        </div>
+      </div>
+
+      <!-- חץ גלילה למטה -->
+      <a href="#countdown-section" class="scroll-arrow-down" aria-label="גללו למטה">
+        <span>↓</span>
+      </a>
+    </section>
+
+    <!-- מסך 2: ספירה לאחור (Countdown) -->
+    <section id="countdown-section" class="screen-section section-white fade-in-on-scroll">
+      <div class="section-inner">
+        <h2 class="section-title">Countdown</h2>
+        <p class="section-subtitle">עוד קצת וזה קורה</p>
+
+        <div class="countdown-grid">
+          <div class="time-card">
+            <span class="time-number" id="days">00</span>
+            <span class="time-label">ימים</span>
+          </div>
+          <div class="time-card">
+            <span class="time-number" id="hours">00</span>
+            <span class="time-label">שעות</span>
+          </div>
+          <div class="time-card">
+            <span class="time-number" id="minutes">00</span>
+            <span class="time-label">דקות</span>
+          </div>
+          <div class="time-card">
+            <span class="time-number" id="seconds">00</span>
+            <span class="time-label">שניות</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- מסך 3: The Wedding Day - ציר זמן -->
+    <section id="timeline-section" class="screen-section section-white fade-in-on-scroll">
+      <div class="section-inner">
+        <h2 class="section-title">The Wedding Day</h2>
+        <p class="section-subtitle">לוח הזמנים לאירוע שלנו</p>
+
+        <div class="timeline-container">
+          <div class="timeline-line"></div>
+
+          <!-- קבלת פנים -->
+          <div class="timeline-item">
+            <div class="timeline-marker"></div>
+            <div class="timeline-details">
+              <span class="timeline-time" id="time-reception">19:00</span>
+              <span class="timeline-event">קבלת פנים ומינגלינג</span>
+            </div>
+          </div>
+
+          <!-- חופה וקידושין -->
+          <div class="timeline-item">
+            <div class="timeline-marker"></div>
+            <div class="timeline-details">
+              <span class="timeline-time" id="time-ceremony">20:15</span>
+              <span class="timeline-event">חופה וקידושין</span>
+            </div>
+          </div>
+
+          <!-- ריקודים ואוכל -->
+          <div class="timeline-item">
+            <div class="timeline-marker"></div>
+            <div class="timeline-details">
+              <span class="timeline-time" id="time-dancing">21:00</span>
+              <span class="timeline-event">ארוחת ערב, מסיבה וריקודים</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- מסך 4: Location & Waze -->
+    <section id="location-section" class="screen-section section-white fade-in-on-scroll">
+      <div class="section-inner">
+        <h2 class="section-title">Location</h2>
+        <p class="section-subtitle">נשמח לראותכם בין אורחינו</p>
+
+        <div class="venue-image-wrapper">
+          <img src="assets/venue.jpg" alt="מקום האירוע" id="venue-image" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'600\' height=\'400\' viewBox=\'0 0 600 400\'><rect fill=\'%23e8edf3\' width=\'600\' height=\'400\'/><text fill=\'%234682B4\' font-family=\'sans-serif\' font-size=\'22\' x=\'50%\' y=\'50%\' text-anchor=\'middle\'>תמונת האולם (assets/venue.jpg)</text></svg>';" />
+        </div>
+
+        <div class="venue-info-box">
+          <h3 class="venue-name" id="venue-name-display">שם האולם</h3>
+          <p class="venue-address" id="venue-address-display">כתובת האולם, עיר</p>
+        </div>
+
+        <a id="waze-btn" href="#" target="_blank" rel="noopener noreferrer" class="waze-button">
+          <svg class="waze-icon" viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12c0 2.85 1.2 5.42 3.12 7.24L4 22l3.05-.95C8.53 21.64 10.21 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm1 14h-2v-2h2v2zm0-4h-2V7h2v5z"/>
+          </svg>
+          ניווט עם Waze
+        </a>
+      </div>
+    </section>
+
+    <!-- מסך 5: Thank You -->
+    <section id="thankyou-section" class="screen-section thankyou-section fade-in-on-scroll">
+      <div class="section-inner thankyou-inner">
+        <div class="monogram-end">B & T</div>
+        <h2 class="section-title thankyou-title">Thank You</h2>
+        <p class="thankyou-text" id="thankyou-text-display">
+          תודה שאתם חוגגים ושמחים איתנו ביום המיוחד שלנו!
+        </p>
+        <p class="see-you-text">מחכים לראותכם ♡</p>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
