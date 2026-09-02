@@ -347,6 +347,7 @@ body {
    מסך 2 – Countdown
    ========================================================================== */
 .countdown-grid {
+  direction: ltr;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 10px;
