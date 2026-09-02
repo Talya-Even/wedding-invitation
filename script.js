@@ -79,7 +79,6 @@ document.addEventListener("DOMContentLoaded", () => {
    שלב 0: אנימציית מעטפה + ניגון אוטומטי ללא שגיאות דפדפן
    ========================================================================== */
 function initEnvelopeAndAudio() {
-
   const overlay = document.getElementById("envelope-overlay");
   const audio = document.getElementById("wedding-audio");
   const musicToggleBtn = document.getElementById("music-toggle-btn");
@@ -97,70 +96,38 @@ function initEnvelopeAndAudio() {
     }
   };
 
-  // ניגון המוזיקה החל משנייה 41
   const playMusic = () => {
-
-    const startAudio = () => {
-
-      // מוודאים שהשיר מתחיל בדיוק משנייה 41
-      audio.currentTime = 41;
-
-      audio.play()
-        .then(() => {
-          isPlaying = true;
-          updateMusicIcon();
-        })
-        .catch(err => {
-          console.log("Audio autoplay was restricted:", err);
-          updateMusicIcon();
-        });
-    };
-
-    // אם ה-metadata כבר נטען
-    if (audio.readyState >= 1) {
-      startAudio();
-    } 
-    
-    // אם עדיין לא נטען – מחכים
-    else {
-      audio.addEventListener("loadedmetadata", startAudio, { once: true });
-    }
+    audio.play().then(() => {
+      isPlaying = true;
+      updateMusicIcon();
+    }).catch(err => {
+      // אם הדפדפן חסם Autoplay, האייקון יישאר על השתק והמשתמש יוכל ללחוץ ידנית
+      console.log("Audio autoplay was restricted:", err);
+      updateMusicIcon();
+    });
   };
 
   // לחיצה על המעטפה: פתיחה אלגנטית והתחלת המוזיקה
   if (overlay) {
-
     overlay.addEventListener("click", () => {
-
       overlay.classList.add("opening");
-
       playMusic();
 
       setTimeout(() => {
         overlay.classList.add("opened");
       }, 700);
-
     }, { once: true });
   }
 
   // כפתור השתק / נגן שצף בפינה התחתונה
   if (musicToggleBtn) {
-
     musicToggleBtn.addEventListener("click", (e) => {
-
       e.stopPropagation();
-
       if (audio.paused) {
-
-        audio.play()
-          .then(updateMusicIcon)
-          .catch(console.error);
-
+        audio.play().then(updateMusicIcon).catch(console.error);
       } else {
-
         audio.pause();
         updateMusicIcon();
-
       }
     });
   }
