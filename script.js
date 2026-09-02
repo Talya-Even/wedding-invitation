@@ -23,7 +23,7 @@ const weddingData = {
   venueName: "אולמי טאו",
   venueAddress: "ירוק 64, צומת כנות",
   // קישור Waze (אפשר להחליף בכתובת המדויקת או בקואורדינטות)
-  wazeLink: "https://waze.com/ul?q=Tel+Aviv&navigate=yes",
+  wazeLink: "https://www.waze.com/kn/live-map/directions/%D7%98%D7%90%D7%95-%D7%90%D7%99%D7%A8%D7%95%D7%A2%D7%99%D7%9D-%D7%99%D7%A8%D7%95%D7%A7-2-%D7%9B%D7%A0%D7%95%D7%AA?to=place.w.22806846.227806316.7024",
 
   // טקסט תודה בסיום
   thankYouText: "תודה שאתם חלק בלתי נפרד מחיינו ושבאתם לשמוח איתנו ביום המאושר שלנו!"
